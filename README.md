@@ -27,11 +27,11 @@ To open the options page, right-click the extension icon and choose Options on t
 
   <img src="https://github.com/encoreshao/dashboard-for-bookmarks/blob/master/demo/settings.png" />
 
-### How to release new version
+### How to create extensions for Chrome
 
-  - 1: updates version number
+  - 1: update the version number in manifest.json
 
-    1. manifest.json - update latest version
+    1. manifest.json - Increase version number
 
   - 2: generate release zip
 
@@ -43,7 +43,7 @@ To open the options page, right-click the extension icon and choose Options on t
   - 3: upload zip file to chrome store
 
     1. go to [Web Store](https://chrome.google.com/webstore/developer/dashboard)
-    2. choose and uoload dashboards_for_bookmarks_vx_x_x.zip
+    2. choose and upload dashboards_for_bookmarks_vx_x_x.zip
 
 ### Online Compress js tool
 
