@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title id="title">Settings - Dashboard of Bookmarks</title>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/css/options.css" media="screen">
+    <script src="/js/jquery-1.11.2.min.js"></script>
+    <script src="/js/options.js"></script>
+  </head>
+  <body class="options">
+    <div class="container">
+      <div class='title'><h1>Settings</h1></div>
+      <div>
+        <table class="options">
+          <tr>
+            <td><strong>Banner Name</strong></td>
+            <td><input type="input" id="BDUserName" name="BDUserName"></input></td>
+          </tr>
+          <tr>
+            <td><strong>Background Image</strong></td>
+            <td>
+              <label>
+                <input type="radio" name="DBBackgroundImage" value="enable" />
+                Random
+              </label>
+              <label>
+                <input type="radio" name="DBBackgroundImage" value="disabled" />
+                Disabled
+              </label>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Display Mode</strong></td>
+            <td>
+              <label>
+                <input type="radio" name="DBMode" value="list" />
+                List
+              </label>
+              <label>
+                <input type="radio" name="DBMode" value="card" />
+                Card
+              </label>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Theme</strong></td>
+            <td>
+              <label>
+                <input type="radio" name="DBThemeColor" value="dark" />
+                Dark
+              </label>
+              <label>
+                <input type="radio" name="DBThemeColor" value="light" />
+                Light
+              </label>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Clock</strong></td>
+            <td>
+              <label>
+                <input type="radio" name="DBClock" value="enable" />
+                Enable
+              </label>
+              <label>
+                <input type="radio" name="DBClock" value="disabled" />
+                Disabled
+              </label>
+            </td>
+          </tr>
+          <tr>
+            <td></td>
+            <td class='actions'>
+              <input type="button" id="Clean" value="RESET"></input>
+              <input type="button" id="Update" value="UPDATE"></input>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <footer>
+      <div class="wrappers">
+        Provided by
+        <a href="https://github.com/encoreshao/">Encore Shao</a>
+        .
+      </div>
+    </footer>
+  </body>
+</html>

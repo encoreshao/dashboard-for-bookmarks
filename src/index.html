@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Dashboard of Bookmarks</title>
+    <meta name="author" content="Encore Shao">
+    <meta name="keywords" content="Dashboard - Bookmarks">
+    <meta name="description" content="Dashboard - Bookmarks">
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/clock.css">
+    <script type="text/javascript" src="/js/jquery-1.11.2.min.js"></script>
+    <script type="text/javascript" src="/js/libs.js"></script>
+    <script type="text/javascript" src="/js/bookmark.js"></script>
+    <script type="text/javascript" src="/js/moment.min.js"></script>
+    <script type="text/javascript" src="/js/clock.js"></script>
+    <script type="text/javascript" src="/js/index.js"></script>
+  </head>
+  <body>
+    <section class='nav-fixed'>
+      <div class='content Ctheme'>
+        <div class='visible'>
+        </div>
+      </div>
+      <div class="setting Ctheme">
+        <ul class="nav-bar">
+          <li>
+            <a href="https://www.google.com/" target="_blank">
+              Google
+            </a>
+          </li>
+          <li>
+            <a href="https://mail.google.com/mail/u/0/?tab=wm" target="_blank">
+              Gmail
+            </a>
+          </li>
+          <li>
+            <a class="ext-url" data-name="extensions">
+              Extensions
+            </a>
+          </li>
+          <li>
+            <a class="ext-url" data-name="downloads">
+              Downloads
+            </a>
+          </li>
+          <li>
+            <a href="chrome-extension://imknfkidkilkomeomcidnnjojiilaofb/src/options/index.html" target="_blank">
+              Settings
+            </a>
+          </li>
+        </ul>
+      </div>
+    </section>
+    <section class='contents'>
+      <div id="clock" class="Ctheme dark disabled">
+        <div class="display">
+          <div class="weekdays"></div>
+          <div class="ampm"></div>
+          <div class="alarm"></div>
+          <div class="digits"></div>
+        </div>
+      </div>
+      <div class='links Ctheme clearfix'>
+        <input type="text" name="keyword" id="keyword" placeholder="Search the bookmark name" />
+        <div id="bookmarks" class='items'></div>
+      </div>
+    </section>
+    <div class='footer'>
+      <div class='wrappers'>
+        <address>encore.shao@gmail.com</address>
+      </div>
+    </div>
+    <div class='back-top' id="back-to-top">Back to top</div>
+  </body>
+</html>

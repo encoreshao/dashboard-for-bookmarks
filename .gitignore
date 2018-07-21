@@ -1,0 +1,9 @@
+.DS_Store
+.rbenv-version
+.ruby-version
+.ruby-gemset
+.rvmrc
+.bundle
+.tags
+*.swp
+.git/*
