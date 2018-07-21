@@ -4,7 +4,7 @@
 
   * Open your Chrome and visit the URL chrome://extensions - Enjoy it!
 
-  ![image](https://github.com/encoreshao/dashboard-for-bookmarks/tree/master/demo/normal-listing.png)
+  <img src="https://github.com/encoreshao/dashboard-for-bookmarks/blob/master/demo/normal-listing.png" />
 
 ### Developer mode in chrome://extensions
 
@@ -25,7 +25,7 @@ To open the options page, right-click the extension icon and choose Options on t
   * Theme
   * Clock
 
-  ![image](https://github.com/encoreshao/dashboard-for-bookmarks/tree/master/demo/settings.png)
+  <img src="https://github.com/encoreshao/dashboard-for-bookmarks/blob/master/demo/settings.png" />
 
 ### How to release new version
 
