@@ -4,6 +4,8 @@
 
   * Open your Chrome and visit the URL chrome://extensions - Enjoy it!
 
+  ![image](https://github.com/encoreshao/dashboard-for-bookmarks/tree/master/demo/normal-listing.png)
+
 ### Developer mode in chrome://extensions
 
   * Check Developer mode in chrome://extensions
@@ -15,13 +17,15 @@ To see your changes, click the Reload (Ctrl+R) link in chrome://extensions. If y
 ### Setting - options
 
 The extension can be configured via an options page.
-To open the options page, right-click the extension icon and choose Options on the menu. You can also go to chrome://extensions and click the Options link.
+To open the options page, right-click the extension icon and choose Options on the menu. You can also go to chrome://extensions and click the options link.
 
   * Banner Name
   * Background Image
   * Display Mode
   * Theme
   * Clock
+
+  ![image](https://github.com/encoreshao/dashboard-for-bookmarks/tree/master/demo/settings.png)
 
 ### How to release new version
 
