@@ -1,75 +1,191 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Dashboard of Bookmarks</title>
-    <meta name="author" content="Encore Shao">
-    <meta name="keywords" content="Dashboard - Bookmarks">
-    <meta name="description" content="Dashboard - Bookmarks">
-    <link rel="stylesheet" href="/css/index.css">
-    <link rel="stylesheet" href="/css/clock.css">
-    <script type="text/javascript" src="/js/jquery-1.11.2.min.js"></script>
-    <script type="text/javascript" src="/js/libs.js"></script>
-    <script type="text/javascript" src="/js/bookmark.js"></script>
-    <script type="text/javascript" src="/js/moment.min.js"></script>
-    <script type="text/javascript" src="/js/clock.js"></script>
-    <script type="text/javascript" src="/js/index.js"></script>
-  </head>
-  <body>
-    <section class='nav-fixed'>
-      <div class='content Ctheme'>
-        <div class='visible'>
-        </div>
-      </div>
-      <div class="setting Ctheme">
-        <ul class="nav-bar">
-          <li>
-            <a href="https://www.google.com/" target="_blank">
-              Google
-            </a>
-          </li>
-          <li>
-            <a href="https://mail.google.com/mail/u/0/?tab=wm" target="_blank">
-              Gmail
-            </a>
-          </li>
-          <li>
-            <a class="ext-url" data-name="extensions">
-              Extensions
-            </a>
-          </li>
-          <li>
-            <a class="ext-url" data-name="downloads">
-              Downloads
-            </a>
-          </li>
-          <li>
-            <a href="chrome-extension://imknfkidkilkomeomcidnnjojiilaofb/src/options/index.html" target="_blank">
-              Settings
-            </a>
-          </li>
-        </ul>
-      </div>
-    </section>
-    <section class='contents'>
-      <div id="clock" class="Ctheme dark disabled">
-        <div class="display">
-          <div class="weekdays"></div>
-          <div class="ampm"></div>
-          <div class="alarm"></div>
-          <div class="digits"></div>
-        </div>
-      </div>
-      <div class='links Ctheme clearfix'>
-        <input type="text" name="keyword" id="keyword" placeholder="Search the bookmark name" />
-        <div id="bookmarks" class='items'></div>
-      </div>
-    </section>
-    <div class='footer'>
-      <div class='wrappers'>
-        <address>encore.shao@gmail.com</address>
-      </div>
+<head>
+  <meta charset="utf-8">
+  <title>New Tab - Bookmark Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body class="theme-dark">
+
+  <!-- Top Bar -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <svg class="topbar-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
+        <polyline points="10 2 10 10 13 7 16 10 16 2"/>
+      </svg>
+      <span class="topbar-title">Bookmark Dashboard</span>
     </div>
-    <div class='back-top' id="back-to-top">Back to top</div>
-  </body>
+    <nav class="topbar-nav">
+      <a href="https://www.google.com/" target="_blank" class="nav-link" title="Google">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <span>Google</span>
+      </a>
+      <a href="https://mail.google.com/" target="_blank" class="nav-link" title="Gmail">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+        <span>Gmail</span>
+      </a>
+      <button class="nav-link" id="btn-theme" title="Toggle theme">
+        <svg id="icon-theme" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        <span>Theme</span>
+      </button>
+      <button class="nav-link" id="btn-view" title="Toggle view mode">
+        <svg id="icon-view-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
+        <svg id="icon-view-list" class="hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg>
+        <span>View</span>
+      </button>
+      <a id="link-settings" class="nav-link" title="Settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+        <span>Settings</span>
+      </a>
+    </nav>
+  </header>
+
+  <!-- Hero Section: Greeting + Clock -->
+  <main class="main-content">
+    <section class="hero">
+      <h1 class="greeting" id="greeting"></h1>
+      <div class="clock" id="clock">
+        <span class="clock-time" id="clock-time"></span>
+        <span class="clock-date" id="clock-date"></span>
+      </div>
+    </section>
+
+    <!-- Search -->
+    <section class="search-section">
+      <div class="search-wrapper">
+        <input type="text" id="search-input" class="search-input" placeholder="Search bookmarks..." autocomplete="off" spellcheck="false">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <span class="search-count" id="search-count"></span>
+      </div>
+    </section>
+
+    <!-- Bookmarks -->
+    <section class="bookmarks-section">
+      <div id="bookmarks" class="bookmarks-container view-grid"></div>
+    </section>
+  </main>
+
+  <!-- Back to Top -->
+  <button class="back-to-top" id="back-to-top" title="Back to top">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+  </button>
+
+  <!-- Settings Panel -->
+  <div class="settings-overlay" id="settings-overlay"></div>
+  <aside class="settings-panel" id="settings-panel">
+    <div class="settings-panel-header">
+      <div class="settings-panel-title-row">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+        <h2>Settings</h2>
+      </div>
+      <button class="settings-panel-close" id="settings-close" title="Close settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+
+    <div class="settings-panel-body">
+      <form id="settings-form">
+        <!-- Name -->
+        <div class="sp-group">
+          <label class="sp-label" for="sp-input-name">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Display Name
+          </label>
+          <p class="sp-desc">Shown in the greeting on your new tab</p>
+          <input type="text" id="sp-input-name" class="sp-input" placeholder="Guest" autocomplete="off" spellcheck="false">
+        </div>
+
+        <!-- Theme -->
+        <div class="sp-group">
+          <label class="sp-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+            Theme
+          </label>
+          <div class="sp-toggle-group">
+            <button type="button" class="sp-toggle" data-setting="theme" data-value="dark">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+              Dark
+            </button>
+            <button type="button" class="sp-toggle" data-setting="theme" data-value="light">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+              Light
+            </button>
+          </div>
+        </div>
+
+        <!-- Display Mode -->
+        <div class="sp-group">
+          <label class="sp-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
+            Display Mode
+          </label>
+          <div class="sp-toggle-group">
+            <button type="button" class="sp-toggle" data-setting="displayMode" data-value="grid">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
+              Grid
+            </button>
+            <button type="button" class="sp-toggle" data-setting="displayMode" data-value="list">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg>
+              List
+            </button>
+          </div>
+        </div>
+
+        <!-- Clock -->
+        <div class="sp-group">
+          <label class="sp-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Clock
+          </label>
+          <div class="sp-toggle-group">
+            <button type="button" class="sp-toggle" data-setting="clockEnabled" data-value="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              On
+            </button>
+            <button type="button" class="sp-toggle" data-setting="clockEnabled" data-value="false">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+              Off
+            </button>
+          </div>
+        </div>
+
+        <!-- Background Image -->
+        <div class="sp-group">
+          <label class="sp-label" for="sp-input-bg">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+            Background Image
+          </label>
+          <p class="sp-desc">Paste a URL or leave empty for solid color</p>
+          <input type="url" id="sp-input-bg" class="sp-input" placeholder="https://images.unsplash.com/..." autocomplete="off" spellcheck="false">
+          <div class="sp-bg-preview" id="sp-bg-preview">
+            <div class="sp-bg-preview-img" id="sp-bg-preview-img"></div>
+            <button type="button" class="sp-bg-clear" id="sp-btn-clear-bg" title="Remove background">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="sp-actions">
+          <button type="button" id="sp-btn-reset" class="sp-btn sp-btn-secondary">Reset</button>
+          <button type="submit" class="sp-btn sp-btn-primary">Save Settings</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="settings-panel-footer">
+      Bookmark Dashboard v1.0 &middot; <a href="https://github.com/encoreshao/" target="_blank" rel="noopener">Encore Shao</a>
+    </div>
+  </aside>
+
+  <!-- Toast -->
+  <div id="toast" class="toast"></div>
+
+  <script src="/js/app.js"></script>
+</body>
 </html>

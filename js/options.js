@@ -1,83 +1,134 @@
-var defaultName = 'Guest';
+/* ========================================
+   Bookmark Dashboard - Options Page
+   Vanilla JS
+   ======================================== */
 
-function loadOptions() {
-  var userName = localStorage["BDUserName"];
-  if (userName == undefined) {
-    userName = defaultName;
-    localStorage["BDUserName"] = userName;
+(function () {
+  'use strict';
+
+  const STORAGE_KEYS = {
+    theme: 'bd_theme',
+    displayMode: 'bd_displayMode',
+    clockEnabled: 'bd_clockEnabled',
+    userName: 'bd_userName',
+    backgroundImage: 'bd_backgroundImage'
+  };
+
+  const DEFAULTS = {
+    theme: 'dark',
+    displayMode: 'grid',
+    clockEnabled: 'true',
+    userName: 'Guest',
+    backgroundImage: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1920&q=80'
+  };
+
+  const $ = (sel) => document.querySelector(sel);
+  const $$ = (sel) => document.querySelectorAll(sel);
+
+  const form = $('#settings-form');
+  const nameInput = $('#input-name');
+  const bgImageInput = $('#input-bg-image');
+  const bgPreview = $('#bg-preview');
+  const bgPreviewImage = $('#bg-preview-image');
+  const btnClearBg = $('#btn-clear-bg');
+  const btnReset = $('#btn-reset');
+  const toast = $('#toast');
+  const toggleBtns = $$('.toggle-btn');
+
+  let settings = {};
+
+  function loadSettings() {
+    for (const [key, storageKey] of Object.entries(STORAGE_KEYS)) {
+      const val = localStorage.getItem(storageKey);
+      settings[key] = val !== null ? val : DEFAULTS[key];
+    }
   }
 
-  updateEventText(localStorage["BDUserName"], '');
-
-  checkAndSetupDefaultValue('DBBackgroundImage', 'enable');
-  checkAndSetupDefaultValue('DBThemeColor', 'dark');
-  checkAndSetupDefaultValue('DBClock', 'disabled');
-  checkAndSetupDefaultValue('DBMode', 'list');
-}
-
-function checkAndSetupDefaultValue(name, defaultValue) {
-  var value = localStorage[name];
-  if (value == undefined) {
-    value = defaultValue;
-    localStorage[name] = value;
+  function updateBgPreview(url) {
+    if (url && url.trim()) {
+      bgPreviewImage.style.backgroundImage = `url('${url.trim()}')`;
+      bgPreview.classList.add('visible');
+    } else {
+      bgPreviewImage.style.backgroundImage = '';
+      bgPreview.classList.remove('visible');
+    }
   }
-  var radios = document.getElementsByName(name);
 
-  if (radios.length > 0) {
-    for (var i = 0; i < radios.length; i++) {
-      var radio = radios[i];
+  function applyToUI() {
+    nameInput.value = settings.userName;
+    bgImageInput.value = settings.backgroundImage || '';
+    updateBgPreview(settings.backgroundImage);
 
-      if (radio.value == value) {
-        radio.setAttribute('checked', 'checked');
-        break
+    toggleBtns.forEach(btn => {
+      const settingKey = btn.dataset.setting;
+      const value = btn.dataset.value;
+      btn.classList.toggle('active', settings[settingKey] === value);
+    });
+  }
+
+  function saveSettings() {
+    for (const [key, storageKey] of Object.entries(STORAGE_KEYS)) {
+      localStorage.setItem(storageKey, settings[key]);
+    }
+  }
+
+  function showToast(message = 'Settings saved') {
+    toast.textContent = message;
+    toast.classList.add('visible');
+    setTimeout(() => toast.classList.remove('visible'), 2000);
+  }
+
+  function handleToggle(e) {
+    const btn = e.currentTarget;
+    const settingKey = btn.dataset.setting;
+    const value = btn.dataset.value;
+
+    settings[settingKey] = value;
+
+    toggleBtns.forEach(b => {
+      if (b.dataset.setting === settingKey) {
+        b.classList.toggle('active', b.dataset.value === value);
       }
-    }
+    });
   }
-}
 
-function saveOptions() {
-  setBannerNameTolocalStorage('BDUserName');
-
-  savingCheckedRadioValueTolocalStorage('DBBackgroundImage');
-  savingCheckedRadioValueTolocalStorage('DBThemeColor');
-  savingCheckedRadioValueTolocalStorage('DBClock');
-  savingCheckedRadioValueTolocalStorage('DBMode');
-
-  updateEventText(localStorage["BDUserName"], "Ok");
-}
-
-function setBannerNameTolocalStorage(name) {
-  localStorage[name] = document.getElementById(name).value;
-}
-
-function savingCheckedRadioValueTolocalStorage(name) {
-  var element = document.getElementsByName(name);
-
-  for (var i = 0; i < element.length; i++) {
-    if (element[i].checked == true) {
-      localStorage[name] = element[i].value;
-    }
+  function handleSubmit(e) {
+    e.preventDefault();
+    settings.userName = nameInput.value.trim() || DEFAULTS.userName;
+    settings.backgroundImage = bgImageInput.value.trim();
+    saveSettings();
+    updateBgPreview(settings.backgroundImage);
+    showToast('Settings saved');
   }
-}
 
-function eraseOptions() {
-  localStorage["BDUserName"] = defaultName;
-  localStorage["DBBackgroundImage"] = 'enable';
-  localStorage["DBThemeColor"] = 'dark';
-  localStorage["DBClock"] = 'disabled';
-  localStorage["DBMode"] = 'list';
+  function handleReset() {
+    settings = { ...DEFAULTS };
+    saveSettings();
+    applyToUI();
+    showToast('Settings reset to defaults');
+  }
 
-  location.reload();
-}
+  function init() {
+    loadSettings();
+    applyToUI();
 
-function updateEventText(userName, msg) {
-  $("#BDUserName").val(userName);
+    toggleBtns.forEach(btn => btn.addEventListener('click', handleToggle));
+    form.addEventListener('submit', handleSubmit);
+    btnReset.addEventListener('click', handleReset);
 
-  if (msg == 'Ok') { window.close(); }
-}
+    bgImageInput.addEventListener('input', () => {
+      updateBgPreview(bgImageInput.value.trim());
+    });
 
-window.addEventListener("load", function(e) {
-  document.getElementById("Update").addEventListener("click", saveOptions);
-  document.getElementById("Clean").addEventListener("click", eraseOptions);
-  loadOptions();
-})
+    btnClearBg.addEventListener('click', () => {
+      bgImageInput.value = '';
+      updateBgPreview('');
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();

@@ -7,3 +7,7 @@
 .tags
 *.swp
 .git/*
+dist/
+key.pem
+config/credentials/*
+!config/credentials/.gitkeep

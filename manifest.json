@@ -1,33 +1,25 @@
 {
-  "manifest_version": 2,
-  "default_locale": "en_US",
-  "author": "Encore Shao",
+  "manifest_version": 3,
+  "name": "Bookmark Dashboard",
   "short_name": "Bookmarks",
-  "name": "Dashboard of Bookmarks",
-  "description": "Add a new dashboard of bookmarks and override the Chrome Newtab page.",
-  "options_page": "src/options/index.html",
-  "version": "0.1.5",
-  "background": {
-    "scripts": [
-      "js/libs.js",
-      "js/bookmark.js",
-      "js/background.js",
-      "js/bg.js"
-    ],
-    "persistent": false
-  },
+  "version": "2.0.0",
+  "description": "A beautiful dashboard for your Chrome bookmarks. Replace your new tab with an organized, searchable bookmark hub.",
+  "author": "Encore Shao",
   "icons": {
     "16": "icons/icon16.png",
-    "19": "icons/icon19.png",
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   },
-  "chrome_url_overrides": { "newtab": "src/index.html" },
+  "background": {
+    "service_worker": "js/service-worker.js"
+  },
+  "chrome_url_overrides": {
+    "newtab": "src/index.html"
+  },
+  "options_page": "src/options/index.html",
   "permissions": [
     "bookmarks",
-    "tabs",
-    "downloads",
     "storage",
-    "<all_urls>"
+    "favicon"
   ]
 }
