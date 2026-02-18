@@ -36,6 +36,8 @@
   const btnTheme = $('#btn-theme');
   const btnView = $('#btn-view');
   const linkSettings = $('#link-settings');
+  const iconThemeDark = $('#icon-theme-dark');
+  const iconThemeLight = $('#icon-theme-light');
   const iconViewGrid = $('#icon-view-grid');
   const iconViewList = $('#icon-view-list');
 
@@ -82,6 +84,10 @@
   function applyTheme() {
     body.classList.remove('theme-dark', 'theme-light');
     body.classList.add(`theme-${settings.theme}`);
+
+    const isDark = settings.theme === 'dark';
+    iconThemeDark.classList.toggle('hidden', !isDark);
+    iconThemeLight.classList.toggle('hidden', isDark);
   }
 
   function toggleTheme() {
