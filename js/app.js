@@ -10,7 +10,6 @@
   const DEFAULTS = {
     theme: 'dark',
     displayMode: 'grid',
-    clockEnabled: true,
     userName: 'Guest',
     backgroundImage: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1920&q=80'
   };
@@ -18,7 +17,6 @@
   const STORAGE_KEYS = {
     theme: 'bd_theme',
     displayMode: 'bd_displayMode',
-    clockEnabled: 'bd_clockEnabled',
     userName: 'bd_userName',
     backgroundImage: 'bd_backgroundImage'
   };
@@ -64,18 +62,13 @@
   /* ---------- State ---------- */
   let settings = { ...DEFAULTS };
   let allBookmarks = [];
-  let clockInterval = null;
 
   /* ---------- Storage Helpers ---------- */
   function loadSettings() {
     for (const [key, storageKey] of Object.entries(STORAGE_KEYS)) {
       const val = localStorage.getItem(storageKey);
       if (val !== null) {
-        if (key === 'clockEnabled') {
-          settings[key] = val === 'true';
-        } else {
-          settings[key] = val;
-        }
+        settings[key] = val;
       }
     }
   }
@@ -148,14 +141,8 @@
   }
 
   function initClock() {
-    if (settings.clockEnabled) {
-      clockEl.classList.remove('hidden');
-      updateClock();
-      clockInterval = setInterval(updateClock, 1000);
-    } else {
-      clockEl.classList.add('hidden');
-      if (clockInterval) clearInterval(clockInterval);
-    }
+    updateClock();
+    setInterval(updateClock, 1000);
   }
 
   /* ---------- Bookmarks ---------- */
@@ -456,12 +443,6 @@
       spBgInput.value = '';
       updateSpBgPreview('');
     });
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && settingsPanel.classList.contains('open')) {
-        closeSettings();
-      }
-    });
   }
 
   /* ---------- Folder Sidebar ---------- */
@@ -560,6 +541,90 @@
     }, 150);
   }
 
+  /* ---------- Keyboard Shortcuts ---------- */
+  const kbdOverlay = $('#kbd-overlay');
+  const kbdModal = $('#kbd-modal');
+  const kbdClose = $('#kbd-modal-close');
+
+  function openShortcutsModal() {
+    kbdOverlay.classList.add('open');
+    kbdModal.classList.add('open');
+  }
+
+  function closeShortcutsModal() {
+    kbdOverlay.classList.remove('open');
+    kbdModal.classList.remove('open');
+  }
+
+  function isTyping() {
+    const tag = document.activeElement?.tagName;
+    return tag === 'INPUT' || tag === 'TEXTAREA' || document.activeElement?.isContentEditable;
+  }
+
+  function initKeyboardShortcuts() {
+    $('#btn-shortcuts').addEventListener('click', openShortcutsModal);
+    kbdOverlay.addEventListener('click', closeShortcutsModal);
+    kbdClose.addEventListener('click', closeShortcutsModal);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (kbdModal.classList.contains('open')) {
+          closeShortcutsModal();
+          return;
+        }
+        if (settingsPanel.classList.contains('open')) {
+          closeSettings();
+          return;
+        }
+        if (folderSidebar.classList.contains('pinned')) {
+          folderSidebar.classList.remove('pinned');
+          return;
+        }
+        if (document.activeElement === searchInput) {
+          searchInput.value = '';
+          searchInput.blur();
+          renderBookmarks();
+          return;
+        }
+        return;
+      }
+
+      if (isTyping()) return;
+
+      if (e.key === '/' || (e.key === 'k' && (e.metaKey || e.ctrlKey))) {
+        e.preventDefault();
+        searchInput.focus();
+        return;
+      }
+
+      if (e.key === '?' || (e.key === '/' && e.shiftKey)) {
+        e.preventDefault();
+        kbdModal.classList.contains('open') ? closeShortcutsModal() : openShortcutsModal();
+        return;
+      }
+
+      switch (e.key.toLowerCase()) {
+        case 't':
+          toggleTheme();
+          break;
+        case 'v':
+          toggleDisplayMode();
+          break;
+        case 's':
+          e.preventDefault();
+          settingsPanel.classList.contains('open') ? closeSettings() : openSettings();
+          break;
+        case 'f':
+          folderSidebar.classList.toggle('pinned');
+          break;
+        case 'home':
+          e.preventDefault();
+          scrollToTop();
+          break;
+      }
+    });
+  }
+
   /* ---------- Init ---------- */
   function init() {
     loadSettings();
@@ -582,6 +647,9 @@
 
     // Settings panel
     initSettingsPanel();
+
+    // Keyboard shortcuts
+    initKeyboardShortcuts();
 
     // Update greeting every minute
     setInterval(updateGreeting, 60000);

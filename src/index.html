@@ -38,6 +38,10 @@
         <svg id="icon-view-list" class="hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg>
         <span>View</span>
       </button>
+      <button class="nav-link" id="btn-shortcuts" title="Keyboard shortcuts (?)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 8h.01"/><path d="M10 8h.01"/><path d="M14 8h.01"/><path d="M18 8h.01"/><path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/><path d="M7 16h10"/></svg>
+        <span>Shortcuts</span>
+      </button>
       <a id="link-settings" class="nav-link" title="Settings">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
         <span>Settings</span>
@@ -153,24 +157,6 @@
           </div>
         </div>
 
-        <!-- Clock -->
-        <div class="sp-group">
-          <label class="sp-label">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            Clock
-          </label>
-          <div class="sp-toggle-group">
-            <button type="button" class="sp-toggle" data-setting="clockEnabled" data-value="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-              On
-            </button>
-            <button type="button" class="sp-toggle" data-setting="clockEnabled" data-value="false">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-              Off
-            </button>
-          </div>
-        </div>
-
         <!-- Background Image -->
         <div class="sp-group">
           <label class="sp-label" for="sp-input-bg">
@@ -199,6 +185,27 @@
       Bookmark Dashboard v1.0 &middot; <a href="https://github.com/encoreshao/" target="_blank" rel="noopener">Encore Shao</a>
     </div>
   </aside>
+
+  <!-- Keyboard Shortcuts Modal -->
+  <div class="kbd-overlay" id="kbd-overlay"></div>
+  <div class="kbd-modal" id="kbd-modal">
+    <div class="kbd-modal-header">
+      <h3>Keyboard Shortcuts</h3>
+      <button class="kbd-modal-close" id="kbd-modal-close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      </button>
+    </div>
+    <div class="kbd-modal-body">
+      <div class="kbd-row"><span class="kbd-desc">Focus search</span><kbd>/</kbd></div>
+      <div class="kbd-row"><span class="kbd-desc">Toggle theme</span><kbd>T</kbd></div>
+      <div class="kbd-row"><span class="kbd-desc">Toggle view (grid/list)</span><kbd>V</kbd></div>
+      <div class="kbd-row"><span class="kbd-desc">Open settings</span><kbd>S</kbd></div>
+      <div class="kbd-row"><span class="kbd-desc">Toggle folder sidebar</span><kbd>F</kbd></div>
+      <div class="kbd-row"><span class="kbd-desc">Back to top</span><kbd>Home</kbd></div>
+      <div class="kbd-row"><span class="kbd-desc">Close / Clear</span><kbd>Esc</kbd></div>
+      <div class="kbd-row"><span class="kbd-desc">Show shortcuts</span><kbd>?</kbd></div>
+    </div>
+  </div>
 
   <!-- Toast -->
   <div id="toast" class="toast"></div>

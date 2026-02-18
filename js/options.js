@@ -9,7 +9,6 @@
   const STORAGE_KEYS = {
     theme: 'bd_theme',
     displayMode: 'bd_displayMode',
-    clockEnabled: 'bd_clockEnabled',
     userName: 'bd_userName',
     backgroundImage: 'bd_backgroundImage'
   };
@@ -17,7 +16,6 @@
   const DEFAULTS = {
     theme: 'dark',
     displayMode: 'grid',
-    clockEnabled: 'true',
     userName: 'Guest',
     backgroundImage: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1920&q=80'
   };
