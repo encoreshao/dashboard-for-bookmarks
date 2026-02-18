@@ -41,6 +41,12 @@
   const iconViewGrid = $('#icon-view-grid');
   const iconViewList = $('#icon-view-list');
 
+  /* Folder sidebar refs */
+  const folderSidebar = $('#folder-sidebar');
+  const folderSidebarTrigger = $('#folder-sidebar-trigger');
+  const folderSidebarList = $('#folder-sidebar-list');
+  const folderSidebarSearch = $('#folder-sidebar-search');
+
   /* Settings panel refs */
   const settingsOverlay = $('#settings-overlay');
   const settingsPanel = $('#settings-panel');
@@ -235,9 +241,10 @@
     return a;
   }
 
-  function createFolderElement(folder) {
+  function createFolderElement(folder, index) {
     const div = document.createElement('div');
     div.className = 'bookmark-folder';
+    div.id = `folder-${index}`;
 
     const header = document.createElement('div');
     header.className = 'folder-header';
@@ -276,10 +283,10 @@
     bookmarksContainer.innerHTML = '';
 
     let totalCount = 0;
-    for (const folder of filtered) {
+    filtered.forEach((folder, i) => {
       totalCount += folder.items.length;
-      bookmarksContainer.appendChild(createFolderElement(folder));
-    }
+      bookmarksContainer.appendChild(createFolderElement(folder, i));
+    });
 
     if (keyword) {
       searchCount.textContent = `${totalCount} result${totalCount !== 1 ? 's' : ''}`;
@@ -296,6 +303,8 @@
       `;
       bookmarksContainer.appendChild(empty);
     }
+
+    buildFolderSidebar(filtered);
   }
 
   function loadBookmarks() {
@@ -455,6 +464,93 @@
     });
   }
 
+  /* ---------- Folder Sidebar ---------- */
+  let sidebarFolders = [];
+
+  function buildFolderSidebar(folders) {
+    sidebarFolders = folders;
+    folderSidebarSearch.value = '';
+    renderSidebarList('');
+  }
+
+  function renderSidebarList(keyword) {
+    folderSidebarList.innerHTML = '';
+    const regex = keyword
+      ? new RegExp(keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')
+      : null;
+
+    let hasMatch = false;
+
+    sidebarFolders.forEach((folder, i) => {
+      if (regex && !regex.test(folder.title)) return;
+      hasMatch = true;
+
+      const li = document.createElement('li');
+      li.className = 'folder-sidebar-item';
+      li.dataset.target = `folder-${i}`;
+      li.innerHTML = `
+        <span class="folder-sidebar-item-name">${escapeHTML(folder.title)}</span>
+        <span class="folder-sidebar-item-count">${folder.items.length}</span>
+      `;
+
+      li.addEventListener('click', () => {
+        const target = document.getElementById(`folder-${i}`);
+        if (target) {
+          const topbarHeight = 56;
+          const y = target.getBoundingClientRect().top + window.scrollY - topbarHeight - 12;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+      });
+
+      folderSidebarList.appendChild(li);
+    });
+
+    if (!hasMatch) {
+      const empty = document.createElement('li');
+      empty.className = 'folder-sidebar-empty';
+      empty.textContent = 'No folders found';
+      folderSidebarList.appendChild(empty);
+    }
+  }
+
+  function updateActiveSidebarItem() {
+    const items = folderSidebarList.querySelectorAll('.folder-sidebar-item');
+    if (items.length === 0) return;
+
+    const topbarHeight = 56;
+    const threshold = topbarHeight + 40;
+    let activeIndex = 0;
+
+    items.forEach((item, i) => {
+      item.classList.remove('active');
+      const target = document.getElementById(item.dataset.target);
+      if (target && target.getBoundingClientRect().top <= threshold) {
+        activeIndex = i;
+      }
+    });
+
+    items[activeIndex].classList.add('active');
+  }
+
+  function initFolderSidebar() {
+    folderSidebarTrigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      folderSidebar.classList.toggle('pinned');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (folderSidebar.classList.contains('pinned') && !folderSidebar.contains(e.target)) {
+        folderSidebar.classList.remove('pinned');
+      }
+    });
+
+    folderSidebarSearch.addEventListener('input', () => {
+      renderSidebarList(folderSidebarSearch.value.trim());
+    });
+
+    window.addEventListener('scroll', updateActiveSidebarItem, { passive: true });
+  }
+
   /* ---------- Search ---------- */
   let searchDebounce = null;
   function handleSearch() {
@@ -480,6 +576,9 @@
     searchInput.addEventListener('input', handleSearch);
     window.addEventListener('scroll', handleScroll, { passive: true });
     backToTopBtn.addEventListener('click', scrollToTop);
+
+    // Folder sidebar
+    initFolderSidebar();
 
     // Settings panel
     initSettingsPanel();
