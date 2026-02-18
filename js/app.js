@@ -199,8 +199,53 @@
     })).filter(folder => folder.items.length > 0);
   }
 
+  /* ---------- Custom Confirm Dialog ---------- */
+  const confirmOverlay = $('#confirm-overlay');
+  const confirmDialog = $('#confirm-dialog');
+  const confirmTitle = $('#confirm-title');
+  const confirmMessage = $('#confirm-message');
+  const confirmOk = $('#confirm-ok');
+  const confirmCancel = $('#confirm-cancel');
+  let confirmResolver = null;
+
+  function showConfirm(title, message) {
+    return new Promise((resolve) => {
+      confirmResolver = resolve;
+      confirmTitle.textContent = title;
+      confirmMessage.textContent = message;
+      confirmOverlay.classList.add('open');
+      confirmDialog.classList.add('open');
+      body.style.overflow = 'hidden';
+      confirmOk.focus();
+    });
+  }
+
+  function closeConfirm(result) {
+    confirmOverlay.classList.remove('open');
+    confirmDialog.classList.remove('open');
+    body.style.overflow = '';
+    if (confirmResolver) {
+      confirmResolver(result);
+      confirmResolver = null;
+    }
+  }
+
+  confirmOk.addEventListener('click', () => closeConfirm(true));
+  confirmCancel.addEventListener('click', () => closeConfirm(false));
+  confirmOverlay.addEventListener('click', () => closeConfirm(false));
+
+  function removeBookmark(id) {
+    chrome.bookmarks.remove(id, () => {
+      loadBookmarks();
+      showToast('Bookmark removed');
+    });
+  }
+
   function createBookmarkElement(bookmark) {
     const isGrid = settings.displayMode === 'grid';
+    const wrapper = document.createElement('div');
+    wrapper.className = 'bookmark-item-wrapper';
+
     const a = document.createElement('a');
     a.href = bookmark.url;
     a.target = '_blank';
@@ -225,7 +270,20 @@
       `;
     }
 
-    return a;
+    const btnRemove = document.createElement('button');
+    btnRemove.className = 'bookmark-remove';
+    btnRemove.title = 'Remove bookmark';
+    btnRemove.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>';
+    btnRemove.addEventListener('click', async (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const ok = await showConfirm('Remove bookmark?', bookmark.title);
+      if (ok) removeBookmark(bookmark.id);
+    });
+
+    wrapper.appendChild(a);
+    wrapper.appendChild(btnRemove);
+    return wrapper;
   }
 
   function createFolderElement(folder, index) {
@@ -568,6 +626,10 @@
 
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
+        if (confirmDialog.classList.contains('open')) {
+          closeConfirm(false);
+          return;
+        }
         if (kbdModal.classList.contains('open')) {
           closeShortcutsModal();
           return;
