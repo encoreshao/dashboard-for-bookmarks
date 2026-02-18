@@ -111,8 +111,20 @@ body.has-bg-image .topbar {
 }
 
 body.has-bg-image.theme-light .topbar {
-  background-color: rgba(255, 255, 255, 0.6);
-  border-bottom-color: rgba(0, 0, 0, 0.08);
+  background-color: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+body.has-bg-image.theme-light .topbar-title,
+body.has-bg-image.theme-light .nav-link {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+body.has-bg-image.theme-light .nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
 }
 
 body.has-bg-image .main-content {
@@ -126,7 +138,12 @@ body.has-bg-image .back-to-top {
 
 body.has-bg-image .greeting,
 body.has-bg-image .clock-time {
+  color: #F1F5F9;
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
+}
+
+body.has-bg-image .clock-date {
+  color: rgba(241, 245, 249, 0.7);
 }
 
 body.has-bg-image .search-input {
@@ -134,11 +151,19 @@ body.has-bg-image .search-input {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-color: rgba(255, 255, 255, 0.1);
+  color: #F1F5F9;
 }
 
-body.has-bg-image.theme-light .search-input {
-  background: rgba(255, 255, 255, 0.7);
-  border-color: rgba(0, 0, 0, 0.1);
+body.has-bg-image .search-input::placeholder {
+  color: rgba(241, 245, 249, 0.45);
+}
+
+body.has-bg-image .search-icon {
+  color: rgba(241, 245, 249, 0.45);
+}
+
+body.has-bg-image .search-count {
+  color: rgba(241, 245, 249, 0.5);
 }
 
 body.has-bg-image .bookmark-folder {
@@ -148,9 +173,52 @@ body.has-bg-image .bookmark-folder {
   border-color: rgba(255, 255, 255, 0.08);
 }
 
-body.has-bg-image.theme-light .bookmark-folder {
-  background: rgba(255, 255, 255, 0.65);
-  border-color: rgba(0, 0, 0, 0.08);
+body.has-bg-image .folder-name {
+  color: rgba(241, 245, 249, 0.9);
+}
+
+body.has-bg-image .folder-count {
+  color: rgba(241, 245, 249, 0.6);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+body.has-bg-image .bookmark-item {
+  color: rgba(241, 245, 249, 0.9);
+}
+
+body.has-bg-image .view-grid .bookmark-item {
+  background: rgba(30, 41, 59, 0.4);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+body.has-bg-image .view-grid .bookmark-item:hover {
+  background: rgba(30, 41, 59, 0.6);
+  border-color: var(--accent);
+}
+
+body.has-bg-image .view-list .bookmark-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+body.has-bg-image .bookmark-title {
+  color: #F1F5F9;
+}
+
+body.has-bg-image .bookmark-url {
+  color: rgba(241, 245, 249, 0.5);
+}
+
+body.has-bg-image .view-grid .bookmark-favicon,
+body.has-bg-image .view-list .bookmark-favicon {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+body.has-bg-image .folder-header:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+body.has-bg-image .empty-state {
+  color: rgba(241, 245, 249, 0.5);
 }
 
 a {
@@ -471,6 +539,11 @@ body.has-bg-image .search-section {
   pointer-events: auto;
 }
 
+body.has-bg-image .bookmark-remove {
+  background: rgba(0, 0, 0, 0.45);
+  color: rgba(255, 255, 255, 0.8);
+}
+
 .bookmark-remove:hover {
   background: #EF4444;
   color: #fff;
@@ -752,6 +825,9 @@ body.has-bg-image .search-section {
   color: var(--text-muted);
   text-align: center;
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .settings-panel-footer a {
@@ -760,6 +836,34 @@ body.has-bg-image .search-section {
 
 .settings-panel-footer a:hover {
   text-decoration: underline;
+}
+
+.sp-feedback {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 7px 14px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-secondary) !important;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  text-decoration: none !important;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+
+.sp-feedback svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.sp-feedback:hover {
+  color: var(--accent) !important;
+  border-color: var(--accent);
+  background: var(--accent-light);
 }
 
 /* --- Settings Panel Form --- */
@@ -1502,8 +1606,41 @@ body.has-bg-image .folder-sidebar-panel {
 }
 
 body.has-bg-image.theme-light .folder-sidebar-panel {
-  background: rgba(255, 255, 255, 0.75);
-  border-right-color: rgba(0, 0, 0, 0.08);
+  background: rgba(30, 41, 59, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-right-color: rgba(255, 255, 255, 0.08);
+}
+
+body.has-bg-image.theme-light .folder-sidebar-item-name {
+  color: rgba(241, 245, 249, 0.8);
+}
+
+body.has-bg-image.theme-light .folder-sidebar-item:hover .folder-sidebar-item-name {
+  color: #F1F5F9;
+}
+
+body.has-bg-image.theme-light .folder-sidebar-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+body.has-bg-image.theme-light .folder-sidebar-header span {
+  color: rgba(241, 245, 249, 0.9);
+}
+
+body.has-bg-image.theme-light .folder-sidebar-search-input {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #F1F5F9;
+}
+
+body.has-bg-image.theme-light .folder-sidebar-search-input::placeholder {
+  color: rgba(241, 245, 249, 0.4);
+}
+
+body.has-bg-image.theme-light .folder-sidebar-item-count {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(241, 245, 249, 0.6);
 }
 
 /* ---------- Responsive ---------- */
