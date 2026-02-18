@@ -309,9 +309,18 @@ button {
 
 /* ---------- Search ---------- */
 .search-section {
-  padding: 8px 24px 24px;
+  position: sticky;
+  top: 56px;
+  z-index: 80;
+  padding: 12px 24px;
   max-width: 640px;
   margin: 0 auto;
+  background: var(--bg-primary);
+  transition: background-color 0.3s ease;
+}
+
+body.has-bg-image .search-section {
+  background: transparent;
 }
 
 .search-wrapper {
