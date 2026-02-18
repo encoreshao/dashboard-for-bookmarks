@@ -3,6 +3,17 @@
 <head>
   <meta charset="utf-8">
   <title>New Tab - Bookmark Dashboard</title>
+  <meta name="author" content="Encore Shao">
+  <meta name="description" content="A beautiful dashboard for your Chrome bookmarks. Replace your new tab with an organized, searchable bookmark hub.">
+  <meta name="keywords" content="Chrome, bookmarks, dashboard, extension, new tab, organization, search, customization">
+
+  <meta name="robots" content="index, follow">
+  <meta name="google" content="notranslate">
+  <meta name="googlebot" content="noarchive">
+  <meta name="googlebot" content="nosnippet">
+  <meta name="googlebot" content="noimageindex">
+  <meta name="googlebot" content="noindex">
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -159,11 +170,17 @@
 
         <!-- Background Image -->
         <div class="sp-group">
-          <label class="sp-label" for="sp-input-bg">
+          <label class="sp-label">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
             Background Image
           </label>
-          <p class="sp-desc">Paste a URL or leave empty for solid color</p>
+          <p class="sp-desc">Pick a preset or paste your own URL</p>
+          <div class="sp-bg-gallery" id="sp-bg-gallery">
+            <button type="button" class="sp-bg-thumb sp-bg-thumb-none" data-url="" title="No background">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/></svg>
+            </button>
+          </div>
+          <label class="sp-label-sm" for="sp-input-bg">Or use a custom URL</label>
           <input type="url" id="sp-input-bg" class="sp-input" placeholder="https://images.unsplash.com/..." autocomplete="off" spellcheck="false">
           <div class="sp-bg-preview" id="sp-bg-preview">
             <div class="sp-bg-preview-img" id="sp-bg-preview-img"></div>

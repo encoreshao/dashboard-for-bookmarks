@@ -389,6 +389,21 @@
   }
 
   /* ---------- Settings Panel ---------- */
+  const BG_PRESETS = [
+    { url: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1920&q=80', label: 'Starry Mountains' },
+    { url: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1920&q=80', label: 'Tropical Beach' },
+    { url: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1920&q=80', label: 'Forest Path' },
+    { url: 'https://images.unsplash.com/photo-1531366936337-7c912a4589a7?w=1920&q=80', label: 'Northern Lights' },
+    { url: 'https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?w=1920&q=80', label: 'Desert Dunes' },
+    { url: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1920&q=80', label: 'Mountain Peak' },
+    { url: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=1920&q=80', label: 'Foggy Valley' },
+    { url: 'https://images.unsplash.com/photo-1536431311719-398b6704d4cc?w=1920&q=80', label: 'Purple Sky' },
+    { url: 'https://images.unsplash.com/photo-1439853949127-fa647821eba0?w=1920&q=80', label: 'Lake Reflection' },
+    { url: 'https://images.unsplash.com/photo-1500534314263-a834e5e29c8e?w=1920&q=80', label: 'Sunset Ridge' },
+  ];
+
+  const spBgGallery = $('#sp-bg-gallery');
+
   let panelSettings = {};
 
   function showToast(message) {
@@ -405,6 +420,31 @@
       spBgPreviewImg.style.backgroundImage = '';
       spBgPreview.classList.remove('visible');
     }
+  }
+
+  function buildBgGallery() {
+    BG_PRESETS.forEach(preset => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'sp-bg-thumb';
+      btn.dataset.url = preset.url;
+      btn.title = preset.label;
+      btn.style.backgroundImage = `url('${preset.url.replace('w=1920', 'w=200')}')`;
+      btn.addEventListener('click', () => selectBgPreset(preset.url));
+      spBgGallery.appendChild(btn);
+    });
+  }
+
+  function selectBgPreset(url) {
+    spBgInput.value = url;
+    updateSpBgPreview(url);
+    syncBgGalleryActive(url);
+  }
+
+  function syncBgGalleryActive(url) {
+    spBgGallery.querySelectorAll('.sp-bg-thumb').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.url === (url || ''));
+    });
   }
 
   function syncPanelToggles() {
@@ -429,6 +469,7 @@
     spBgInput.value = panelSettings.backgroundImage || '';
     updateSpBgPreview(panelSettings.backgroundImage);
     syncPanelToggles();
+    syncBgGalleryActive(panelSettings.backgroundImage || '');
   }
 
   function openSettings() {
@@ -470,10 +511,13 @@
     spBgInput.value = panelSettings.backgroundImage;
     updateSpBgPreview(panelSettings.backgroundImage);
     syncPanelToggles();
+    syncBgGalleryActive(panelSettings.backgroundImage || '');
     showToast('Reset to defaults');
   }
 
   function initSettingsPanel() {
+    buildBgGallery();
+
     linkSettings.addEventListener('click', openSettings);
     settingsOverlay.addEventListener('click', closeSettings);
     settingsClose.addEventListener('click', closeSettings);
@@ -494,12 +538,17 @@
     spBtnReset.addEventListener('click', resetAllSettings);
 
     spBgInput.addEventListener('input', () => {
-      updateSpBgPreview(spBgInput.value.trim());
+      const val = spBgInput.value.trim();
+      updateSpBgPreview(val);
+      syncBgGalleryActive(val);
     });
 
     spBtnClearBg.addEventListener('click', () => {
-      spBgInput.value = '';
-      updateSpBgPreview('');
+      selectBgPreset('');
+    });
+
+    spBgGallery.querySelector('.sp-bg-thumb-none').addEventListener('click', () => {
+      selectBgPreset('');
     });
   }
 
