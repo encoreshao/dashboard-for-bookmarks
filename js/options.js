@@ -36,10 +36,15 @@
   let settings = {};
 
   function loadSettings() {
-    for (const [key, storageKey] of Object.entries(STORAGE_KEYS)) {
-      const val = localStorage.getItem(storageKey);
-      settings[key] = val !== null ? val : DEFAULTS[key];
-    }
+    return new Promise((resolve) => {
+      const keys = Object.values(STORAGE_KEYS);
+      chrome.storage.local.get(keys, (result) => {
+        for (const [key, storageKey] of Object.entries(STORAGE_KEYS)) {
+          settings[key] = result[storageKey] !== undefined ? result[storageKey] : DEFAULTS[key];
+        }
+        resolve();
+      });
+    });
   }
 
   function updateBgPreview(url) {
@@ -65,9 +70,11 @@
   }
 
   function saveSettings() {
+    const toStore = {};
     for (const [key, storageKey] of Object.entries(STORAGE_KEYS)) {
-      localStorage.setItem(storageKey, settings[key]);
+      toStore[storageKey] = settings[key];
     }
+    chrome.storage.local.set(toStore);
   }
 
   function showToast(message = 'Settings saved') {
@@ -107,8 +114,9 @@
   }
 
   function init() {
-    loadSettings();
-    applyToUI();
+    loadSettings().then(() => {
+      applyToUI();
+    });
 
     toggleBtns.forEach(btn => btn.addEventListener('click', handleToggle));
     form.addEventListener('submit', handleSubmit);

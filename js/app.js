@@ -65,19 +65,24 @@
   let settings = { ...DEFAULTS };
   let allBookmarks = [];
 
-  /* ---------- Storage Helpers ---------- */
+  /* ---------- Storage Helpers (chrome.storage.local) ---------- */
   function loadSettings() {
-    for (const [key, storageKey] of Object.entries(STORAGE_KEYS)) {
-      const val = localStorage.getItem(storageKey);
-      if (val !== null) {
-        settings[key] = val;
-      }
-    }
+    return new Promise((resolve) => {
+      const keys = Object.values(STORAGE_KEYS);
+      chrome.storage.local.get(keys, (result) => {
+        for (const [key, storageKey] of Object.entries(STORAGE_KEYS)) {
+          if (result[storageKey] !== undefined) {
+            settings[key] = result[storageKey];
+          }
+        }
+        resolve();
+      });
+    });
   }
 
   function saveSetting(key, value) {
     settings[key] = value;
-    localStorage.setItem(STORAGE_KEYS[key], String(value));
+    chrome.storage.local.set({ [STORAGE_KEYS[key]]: String(value) });
   }
 
   /* ---------- Theme ---------- */
@@ -462,20 +467,18 @@
   }
 
   function populatePanel() {
-    panelSettings = {};
-    for (const [key, storageKey] of Object.entries(STORAGE_KEYS)) {
-      const val = localStorage.getItem(storageKey);
-      if (val !== null) {
-        panelSettings[key] = val;
-      } else {
-        panelSettings[key] = String(DEFAULTS[key]);
+    const keys = Object.values(STORAGE_KEYS);
+    chrome.storage.local.get(keys, (result) => {
+      panelSettings = {};
+      for (const [key, storageKey] of Object.entries(STORAGE_KEYS)) {
+        panelSettings[key] = result[storageKey] !== undefined ? result[storageKey] : String(DEFAULTS[key]);
       }
-    }
-    spNameInput.value = panelSettings.userName || '';
-    spBgInput.value = panelSettings.backgroundImage || '';
-    updateSpBgPreview(panelSettings.backgroundImage);
-    syncPanelToggles();
-    syncBgGalleryActive(panelSettings.backgroundImage || '');
+      spNameInput.value = panelSettings.userName || '';
+      spBgInput.value = panelSettings.backgroundImage || '';
+      updateSpBgPreview(panelSettings.backgroundImage);
+      syncPanelToggles();
+      syncBgGalleryActive(panelSettings.backgroundImage || '');
+    });
   }
 
   function openSettings() {
@@ -495,18 +498,21 @@
     panelSettings.userName = spNameInput.value.trim() || String(DEFAULTS.userName);
     panelSettings.backgroundImage = spBgInput.value.trim();
 
+    const toStore = {};
     for (const [key, storageKey] of Object.entries(STORAGE_KEYS)) {
-      localStorage.setItem(storageKey, panelSettings[key]);
+      toStore[storageKey] = panelSettings[key];
     }
-
-    loadSettings();
-    applyTheme();
-    applyBackgroundImage();
-    applyDisplayMode();
-    updateGreeting();
-    initClock();
-    renderBookmarks(searchInput.value.trim());
-    showToast('Settings saved');
+    chrome.storage.local.set(toStore, () => {
+      loadSettings().then(() => {
+        applyTheme();
+        applyBackgroundImage();
+        applyDisplayMode();
+        updateGreeting();
+        initClock();
+        renderBookmarks(searchInput.value.trim());
+        showToast('Settings saved');
+      });
+    });
   }
 
   function resetAllSettings() {
@@ -744,13 +750,14 @@
 
   /* ---------- Init ---------- */
   function init() {
-    loadSettings();
-    applyTheme();
-    applyBackgroundImage();
-    applyDisplayMode();
-    updateGreeting();
-    initClock();
-    loadBookmarks();
+    loadSettings().then(() => {
+      applyTheme();
+      applyBackgroundImage();
+      applyDisplayMode();
+      updateGreeting();
+      initClock();
+      loadBookmarks();
+    });
 
     // Event listeners
     btnTheme.addEventListener('click', toggleTheme);
