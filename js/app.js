@@ -9,7 +9,7 @@
   /* ---------- Settings ---------- */
   const DEFAULTS = {
     theme: 'dark',
-    displayMode: 'grid',
+    displayMode: 'list',
     userName: 'Guest',
     backgroundImage: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1920&q=80'
   };
@@ -723,6 +723,13 @@
       if (e.key === '?' || (e.key === '/' && e.shiftKey)) {
         e.preventDefault();
         kbdModal.classList.contains('open') ? closeShortcutsModal() : openShortcutsModal();
+        return;
+      }
+
+      if (e.key.toLowerCase() === 'g') {
+        e.preventDefault();
+        const link = e.shiftKey ? $('#link-google') : $('#link-gmail');
+        if (link) link.click();
         return;
       }
 

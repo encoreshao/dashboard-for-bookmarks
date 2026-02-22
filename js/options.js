@@ -15,7 +15,7 @@
 
   const DEFAULTS = {
     theme: 'dark',
-    displayMode: 'grid',
+    displayMode: 'list',
     userName: 'Guest',
     backgroundImage: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1920&q=80'
   };
